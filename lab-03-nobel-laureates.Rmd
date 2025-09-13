@@ -127,7 +127,7 @@ There are some observations in this dataset that we will exclude from our analys
 -   laureates who are people as opposed to organizations (organizations are denoted with `"org"` as their `gender`)
 -   laureates who are still alive (their `died_date` is `NA`)
 
-```{r echo=FALSE}
+```{r create-nobel-living}
 nobel_living <- nobel %>%
   filter(
     !is.na(country),
