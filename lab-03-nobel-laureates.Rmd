@@ -117,6 +117,8 @@ In these cases the variables below reflect a different name than their counterpa
 
 1.  How many observations and how many variables are in the dataset? Use inline code to answer this question. What does each row represent?
 
+There are `r nrow(nobel)` observations and `r ncol(nobel)` variables in the dataset. Each row represents a Nobel laureate.
+
 There are some observations in this dataset that we will exclude from our analysis to match the Buzzfeed results.
 
 2.  Create a new data frame called `nobel_living` that filters for
