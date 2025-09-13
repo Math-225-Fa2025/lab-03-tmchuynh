@@ -102,12 +102,12 @@
 \urlstyle{same}
 \hypersetup{
   pdftitle={Lab 03 - Nobel laureates},
-  pdfauthor={Your Name},
+  pdfauthor={Tina Huynh},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 
 \title{Lab 03 - Nobel laureates}
-\author{Your Name}
+\author{Tina Huynh}
 \date{}
 
 \begin{document}
@@ -281,6 +281,9 @@ reflect a different name than their counterparts without the suffix
   inline code to answer this question. What does each row represent?
 \end{enumerate}
 
+There are 935 observations and 26 variables in the dataset. Each row
+represents a Nobel laureate.
+
 There are some observations in this dataset that we will exclude from
 our analysis to match the Buzzfeed results.
 
@@ -303,6 +306,17 @@ our analysis to match the Buzzfeed results.
   laureates who are still alive (their \texttt{died\_date} is
   \texttt{NA})
 \end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{nobel\_living }\OtherTok{\textless{}{-}}\NormalTok{ nobel }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(}
+    \SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(country),}
+\NormalTok{    gender }\SpecialCharTok{!=} \StringTok{"org"}\NormalTok{,}
+    \FunctionTok{is.na}\NormalTok{(died\_date)}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
 
 Confirm that once you have filtered for these characteristics you are
 left with a data frame with 228 observations, once again using inline
@@ -329,13 +343,11 @@ write this if statement is the condition we're testing for. If
 to \texttt{"USA"}. If not, we set the \texttt{country\_us} to
 \texttt{"Other"}.
 
-\begin{marginfigure}
-Note that we can achieve the same result using the \texttt{fct\_other()}
-function we've seen before (i.e.~with
-\texttt{country\_us\ =\ fct\_other(country,\ "USA")}). We decided to use
-the \texttt{if\_else()} here to show you one example of an if statement
-in R.
-\end{marginfigure}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Note that we can achieve the same result using the \textasciigrave{}fct\_other()\textasciigrave{} function we\textquotesingle{}ve seen before (i.e. with \textasciigrave{}country\_us = fct\_other(country, "USA")\textasciigrave{}). We decided to use the \textasciigrave{}if\_else()\textasciigrave{} here to show you one example of an if statement in R.}
+\end{Highlighting}
+\end{Shaded}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -382,6 +394,26 @@ explicitly ask you to do so.
   \end{itemize}
 \end{enumerate}
 
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(nobel\_living\_science, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ country\_us)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_bar}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{ category) }\SpecialCharTok{+}
+  \FunctionTok{coord\_flip}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{x =} \StringTok{"Country"}\NormalTok{,}
+    \AttributeTok{y =} \StringTok{"Number of Nobel Laureates"}\NormalTok{,}
+    \AttributeTok{title =} \StringTok{"Nobel Laureates by Category and Country"}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{lab-03-nobel-laureates_files/figure-latex/faceted-bar-plot-1.pdf}}
+
+The visualization shows that the majority of living Nobel laureates in
+Physics, Chemistry, Medicine, and Economics were indeed based in the US
+when they won their prizes. This supports the Buzzfeed headline's claim.
+
 🧶 ✅ ⬆️ Knit, \emph{commit, and push your changes to GitHub with an
 appropriate commit message. Make sure to commit and push all changed
 files so that your Git pane is cleared up afterwards.d}
@@ -390,19 +422,42 @@ files so that your Git pane is cleared up afterwards.d}
 other
 countries}\label{but-of-those-us-based-nobel-laureates-many-were-born-in-other-countries}
 
-\begin{marginfigure}
-\textbf{Hint:} You should be able to borrow from code you used earlier
-to create the \texttt{country\_us} variable.
-\end{marginfigure}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{**Hint:** You should be able to borrow from code you used earlier to create the \textasciigrave{}country\_us\textasciigrave{} variable.}
+\end{Highlighting}
+\end{Shaded}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \setcounter{enumi}{3}
+\tightlist
 \item
   Create a new variable called \texttt{born\_country\_us} that has the
   value \texttt{"USA"} if the laureate is born in the US, and
   \texttt{"Other"} otherwise. How many of the winners are born in the
   US?
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{nobel\_living\_science }\OtherTok{\textless{}{-}}\NormalTok{ nobel\_living\_science }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{born\_country\_us =} \FunctionTok{if\_else}\NormalTok{(born\_country }\SpecialCharTok{==} \StringTok{"USA"}\NormalTok{, }\StringTok{"USA"}\NormalTok{, }\StringTok{"Other"}\NormalTok{)}
+\NormalTok{  )}
+
+\CommentTok{\# Count winners born in the US}
+\NormalTok{us\_born\_count }\OtherTok{\textless{}{-}}\NormalTok{ nobel\_living\_science }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(born\_country\_us }\SpecialCharTok{==} \StringTok{"USA"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{nrow}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+There are 105 winners who were born in the US.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{4}
 \item
   Add a second variable to your visualization from Exercise 3 based on
   whether the laureate was born in the US or not. Based on your
@@ -422,6 +477,30 @@ to create the \texttt{country\_us} variable.
   \end{itemize}
 \end{enumerate}
 
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(nobel\_living\_science, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ country\_us, }\AttributeTok{fill =}\NormalTok{ born\_country\_us)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_bar}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{ category) }\SpecialCharTok{+}
+  \FunctionTok{coord\_flip}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{x =} \StringTok{"Country where award was won"}\NormalTok{,}
+    \AttributeTok{y =} \StringTok{"Number of Nobel Laureates"}\NormalTok{,}
+    \AttributeTok{fill =} \StringTok{"Birth country"}\NormalTok{,}
+    \AttributeTok{title =} \StringTok{"Nobel Laureates by Category, Award Country, and Birth Country"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"USA"} \OtherTok{=} \StringTok{"\#4e79a7"}\NormalTok{, }\StringTok{"Other"} \OtherTok{=} \StringTok{"\#f28e2c"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{lab-03-nobel-laureates_files/figure-latex/stacked-bar-plot-1.pdf}}
+
+The data supports Buzzfeed's claim. While many Nobel laureates were
+based in the US when they won their prizes, a substantial portion of
+these US-based winners were actually born in other countries,
+highlighting the importance of immigration to American scientific
+achievement.
+
 🧶 ✅ ⬆️ Knit, \emph{commit, and push your changes to GitHub with an
 appropriate commit message. Make sure to commit and push all changed
 files so that your Git pane is cleared up afterwards.}
@@ -429,11 +508,11 @@ files so that your Git pane is cleared up afterwards.}
 \subsection{Here's where those immigrant Nobelists were
 born}\label{heres-where-those-immigrant-nobelists-were-born}
 
-\begin{marginfigure}
-Note that your bar plot won't exactly match the one from the Buzzfeed
-article. This is likely because the data has been updated since the
-article was published.
-\end{marginfigure}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Note that your bar plot won\textquotesingle{}t exactly match the one from the Buzzfeed article. This is likely because the data has been updated since the article was published.}
+\end{Highlighting}
+\end{Shaded}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -447,6 +526,38 @@ article was published.
   descending order of number of observations for each country. Which
   country is the most common?
 \end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{immigrant\_nobelists }\OtherTok{\textless{}{-}}\NormalTok{ nobel\_living\_science }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(country\_us }\SpecialCharTok{==} \StringTok{"USA"}\NormalTok{, born\_country\_us }\SpecialCharTok{==} \StringTok{"Other"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{count}\NormalTok{(born\_country) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{arrange}\NormalTok{(}\FunctionTok{desc}\NormalTok{(n))}
+
+\CommentTok{\# Display the table}
+\NormalTok{immigrant\_nobelists}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 21 x 2
+##    born_country       n
+##    <chr>          <int>
+##  1 Germany            7
+##  2 United Kingdom     7
+##  3 China              5
+##  4 Canada             4
+##  5 Japan              3
+##  6 Australia          2
+##  7 Israel             2
+##  8 Norway             2
+##  9 Austria            1
+## 10 Finland            1
+## # i 11 more rows
+\end{verbatim}
+
+The most common birth country for immigrant Nobel laureates who won
+their prize while in the US is Germany.
 
 🧶 ✅ ⬆️ Knit, \emph{commit, and push your changes to GitHub with an
 appropriate commit message. Make sure to commit and push all changed
